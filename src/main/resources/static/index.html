@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сериал на Plyr</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <style>
+        body { display: flex; gap: 20px; font-family: sans-serif; }
+        .playlist { width: 200px; }
+        .playlist button { display: block; width: 100%; margin: 5px 0; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div>
+    <video id="player" playsinline controls width="640" height="360">
+        <source src="/videos/1.mp4" type="video/mp4" />
+    </video>
+</div>
+
+<div class="playlist">
+    <h3>Серии</h3>
+    <button onclick="changeVideo('/videos/1.mp4')">Серия 1</button>
+    <button onclick="changeVideo('/videos/2.mp4')">Серия 2</button>
+    <button onclick="changeVideo('/videos/3.mp4')">Серия 3</button>
+</div>
+
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script>
+    const player = new Plyr('#player');
+    function changeVideo(src) {
+        player.source = {
+            type: 'video',
+            sources: [
+                { src: src, type: 'video/mp4' }
+            ]
+        };
+        player.play();
+    }
+</script>
+</body>
+</html>
