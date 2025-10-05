@@ -1,0 +1,75 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.anime-list, .playlist {
+    width: 220px;
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.anime-list button, .playlist button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #2c2c2c;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.anime-list button:hover, .playlist button:hover {
+    background: #3a3a3a;
+}
+
+video {
+    max-width: 900px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.anime-list, .playlist {
+    flex-shrink: 0;
+}
+
+.anime-list {
+    height: fit-content;
+}
+
+.playlist {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.playlist h3 {
+    margin-top: 0;
+}
+
+#animeContainer, #episodeContainer {
+    display: flex;
+    flex-direction: column;
+}

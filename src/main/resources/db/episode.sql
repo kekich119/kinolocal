@@ -1,7 +1,7 @@
 create table episode
 (
-    id SERIAL PRIMARY KEY,
-    animeId INTEGER NOT NULL,
-    episodeNumber INTEGER NOT NULL,
-    videoUrl TEXT NOT NULL
-)
+    id serial primary key,
+    episode_number text not null,
+    video_url text not null,
+    anime_id integer not null references anime(id) on delete cascade
+);

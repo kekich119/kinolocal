@@ -1,7 +1,10 @@
 package com.kekich.kinolocal.service;
 
+import com.kekich.kinolocal.model.Episode;
 import com.kekich.kinolocal.repository.EpisodeRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EpisodeService {
@@ -13,6 +16,8 @@ public class EpisodeService {
     }
 
 
-
+    public List<Episode> getEpisodesByAnimeId(Long id) {
+        return episodeRepository.findByAnimeId(id);
+    }
 
 }

@@ -1,6 +1,5 @@
 create table anime
 (
-    id SERIAL PRIMARY KEY,
-    tittle TEXT NOT NULL
-
-)
+    id serial primary key,
+    title text not null
+);
