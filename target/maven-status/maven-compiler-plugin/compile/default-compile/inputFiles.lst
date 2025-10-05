@@ -1,0 +1,11 @@
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/KinolocalApplication.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/controller/AdminController.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/controller/AnimeController.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/model/Anime.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/model/Episode.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/repository/AnimeRepository.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/repository/EpisodeRepository.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/service/AnimeScannerService.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/service/AnimeService.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/service/EpisodeService.java
+/Users/kekich/IdeaProjects/kinolocal/src/main/java/com/kekich/kinolocal/service/VideoConverter.java

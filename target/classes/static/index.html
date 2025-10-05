@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<link rel="stylesheet" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Аниме Плеер — Apple Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { display: flex; gap: 20px; font-family: sans-serif; margin: 20px; }
+        .anime-list, .playlist { width: 200px; }
+        .anime-list button, .playlist button { display: block; width: 100%; margin: 5px 0; padding: 10px; cursor: pointer; }
+        video { max-width: 800px; border: 1px solid #ccc; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<div class="anime-list">
+    <h3>Аниме</h3>
+    <div id="animeContainer"></div>
+</div>
+
+<div>
+    <video id="player" controls width="640" height="360" playsinline webkit-playsinline>
+        <source src="" type="video/mp4" />
+    </video>
+</div>
+
+<div class="playlist">
+    <h3>Серии</h3>
+    <div id="episodeContainer"></div>
+</div>
+
+<script>
+    let animes = [];
+
+    fetch("/anime")
+        .then(response => response.json())
+        .then(data => {
+            animes = data;
+            const animeContainer = document.getElementById("animeContainer");
+            data.forEach(anime => {
+                let btn = document.createElement("button");
+                btn.textContent = anime.title;
+                btn.onclick = () => showEpisodes(anime);
+                animeContainer.appendChild(btn);
+            });
+        });
+
+    function showEpisodes(anime) {
+        const episodeContainer = document.getElementById("episodeContainer");
+        episodeContainer.innerHTML = "";
+
+        anime.episodes.forEach(ep => {
+            let btn = document.createElement("button");
+            btn.textContent = "Серия " + ep.episodeNumber;
+            btn.onclick = () => changeVideo(ep.videoUrl);
+            episodeContainer.appendChild(btn);
+        });
+
+        if (anime.episodes.length > 0) {
+            changeVideo(anime.episodes[0].videoUrl);
+        }
+    }
+
+    function changeVideo(src) {
+        const player = document.getElementById("player");
+        player.src = encodeURI(src);
+        player.play();
+    }
+</script>
+</body>
+</html>
