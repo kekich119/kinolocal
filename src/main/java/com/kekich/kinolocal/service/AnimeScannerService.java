@@ -38,6 +38,7 @@ public class AnimeScannerService {
     @EventListener(ContextRefreshedEvent.class)
     @Transactional
     public void scanFillDb() {
+        System.out.println("🔹 Начинаю конвертацию видео...");
         try (BufferedReader br = new BufferedReader(new FileReader("video_path.txt"))) {
             PATH = br.readLine();
         } catch (IOException e) {

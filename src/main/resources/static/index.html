@@ -1,38 +1,78 @@
 <!DOCTYPE html>
 <html lang="ru">
-
-<link rel="stylesheet" href="style.css">
 <head>
     <meta charset="UTF-8">
-    <title>Аниме Плеер — Apple Player</title>
+    <title>Аниме Плеер — Universal Player</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { display: flex; gap: 20px; font-family: sans-serif; margin: 20px; }
-        .anime-list, .playlist { width: 200px; }
-        .anime-list button, .playlist button { display: block; width: 100%; margin: 5px 0; padding: 10px; cursor: pointer; }
-        video { max-width: 800px; border: 1px solid #ccc; border-radius: 6px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="anime-list">
-    <h3>Аниме</h3>
-    <div id="animeContainer"></div>
+<div class="anime-list-container">
+    <div class="anime-list">
+        <h3>Аниме</h3>
+        <div id="animeContainer"></div>
+    </div>
+
+    <div class="playlist">
+        <h3>Серии</h3>
+        <div id="episodeContainer"></div>
+    </div>
 </div>
 
-<div>
+<div class="video-container">
     <video id="player" controls width="640" height="360" playsinline webkit-playsinline>
-        <source src="" type="video/mp4" />
+        Ваш браузер не поддерживает видео тег.
     </video>
-</div>
-
-<div class="playlist">
-    <h3>Серии</h3>
-    <div id="episodeContainer"></div>
+    <div id="errorMessage" class="error"></div>
 </div>
 
 <script>
+    // Ваш JavaScript код остается без изменений
     let animes = [];
+
+    // Проверка поддержки кодеков браузером
+    function canPlayType(mimeType) {
+        const video = document.createElement('video');
+        return video.canPlayType(mimeType) !== '';
+    }
+
+    // Определяем лучший формат для файла
+    function getVideoSources(videoUrl) {
+        const ext = videoUrl.split('.').pop().toLowerCase();
+        const sources = [];
+
+        if (ext === 'mp4') {
+            // MP4 с разными кодеками
+            sources.push({
+                src: videoUrl,
+                type: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' // H.264 + AAC
+            });
+            sources.push({
+                src: videoUrl,
+                type: 'video/mp4' // Без указания кодеков
+            });
+        } else if (ext === 'webm') {
+            sources.push({
+                src: videoUrl,
+                type: 'video/webm; codecs="vp8, vorbis"'
+            });
+        } else if (ext === 'mkv') {
+            // MKV может содержать разные кодеки
+            sources.push({
+                src: videoUrl,
+                type: 'video/x-matroska'
+            });
+        } else {
+            // Для неизвестных форматов
+            sources.push({
+                src: videoUrl,
+                type: 'video/mp4' // Пробуем как MP4
+            });
+        }
+
+        return sources;
+    }
 
     fetch("/anime")
         .then(response => response.json())
@@ -45,15 +85,27 @@
                 btn.onclick = () => showEpisodes(anime);
                 animeContainer.appendChild(btn);
             });
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки аниме:', error);
         });
 
     function showEpisodes(anime) {
         const episodeContainer = document.getElementById("episodeContainer");
         episodeContainer.innerHTML = "";
 
+        anime.episodes.sort((a, b) => a.episodeNumber - b.episodeNumber);
+
         anime.episodes.forEach(ep => {
             let btn = document.createElement("button");
             btn.textContent = "Серия " + ep.episodeNumber;
+
+            // Добавляем информацию о формате
+            let formatInfo = document.createElement("div");
+            formatInfo.className = "format-info";
+            formatInfo.textContent = ep.videoUrl.split('.').pop().toUpperCase();
+            btn.appendChild(formatInfo);
+
             btn.onclick = () => changeVideo(ep.videoUrl);
             episodeContainer.appendChild(btn);
         });
@@ -65,9 +117,61 @@
 
     function changeVideo(src) {
         const player = document.getElementById("player");
-        player.src = encodeURI(src);
-        player.play();
+        const errorMessage = document.getElementById("errorMessage");
+
+        // Очищаем предыдущие сообщения
+        errorMessage.textContent = "";
+
+        // Очищаем предыдущие источники
+        player.innerHTML = "";
+
+        const sources = getVideoSources(src);
+
+        // Добавляем все возможные источники
+        sources.forEach(source => {
+            const sourceElement = document.createElement("source");
+            sourceElement.src = encodeURI(source.src);
+            sourceElement.type = source.type;
+            player.appendChild(sourceElement);
+        });
+
+        // Добавляем fallback сообщение
+        const fallback = document.createElement("p");
+        fallback.textContent = "Ваш браузер не поддерживает этот формат видео.";
+        player.appendChild(fallback);
+
+        // Пытаемся воспроизвести
+        player.load();
+
+        player.play().catch(error => {
+            console.error("Ошибка воспроизведения:", error);
+            errorMessage.textContent = `Ошибка воспроизведения: ${error.message}. Попробуйте другую серию или формат.`;
+        });
+
+        // Обработчики событий видео
+        player.addEventListener('error', function(e) {
+            console.error("Video error:", player.error);
+            errorMessage.textContent = `Ошибка видео: ${getVideoErrorText(player.error?.code)}`;
+        });
     }
+
+    function getVideoErrorText(errorCode) {
+        switch(errorCode) {
+            case 1: return "Видео прервано";
+            case 2: return "Ошибка сети";
+            case 3: return "Ошибка декодирования - неподдерживаемый формат";
+            case 4: return "Видео не поддерживается";
+            default: return "Неизвестная ошибка";
+        }
+    }
+
+    // Проверяем поддержку кодеков при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Поддержка форматов:");
+        console.log("MP4/H.264:", canPlayType('video/mp4; codecs="avc1.42E01E"'));
+        console.log("MP4/AAC:", canPlayType('video/mp4; codecs="mp4a.40.2"'));
+        console.log("WebM:", canPlayType('video/webm'));
+    });
 </script>
 </body>
 </html>

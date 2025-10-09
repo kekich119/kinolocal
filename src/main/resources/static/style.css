@@ -1,75 +1,258 @@
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212;
-    color: #eee;
+/* style.css */
+
+/* Базовые стили */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-h3 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    color: #333;
 }
 
+/* Контейнеры списков */
 .anime-list, .playlist {
-    width: 220px;
-    background: #1e1e1e;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    width: 280px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.anime-list h3, .playlist h3 {
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+/* Кнопки */
 .anime-list button, .playlist button {
     display: block;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 8px;
-    border: none;
-    border-radius: 6px;
-    background: #2c2c2c;
-    color: #fff;
-    font-size: 1em;
+    margin: 8px 0;
+    padding: 12px 16px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .anime-list button:hover, .playlist button:hover {
-    background: #3a3a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.anime-list button:active, .playlist button:active {
+    transform: translateY(0);
+}
+
+/* Видеоплеер */
+.video-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 video {
-    max-width: 900px;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    background: #000;
+    margin-bottom: 15px;
+}
+
+/* Сообщения об ошибках */
+.error {
+    color: #e53e3e;
+    background: #fed7d7;
+    padding: 12px 16px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border: 1px solid #feb2b2;
+    margin: 10px 0;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(229, 62, 62, 0.1);
 }
 
-body {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
+/* Информация о формате */
+.format-info {
+    font-size: 11px;
+    color: #cbd5e0;
+    margin-top: 4px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.anime-list, .playlist {
-    flex-shrink: 0;
+/* Адаптивность */
+@media (max-width: 1200px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .anime-list, .playlist {
+        width: 100%;
+        max-width: 500px;
+        margin-bottom: 20px;
+    }
+
+    .anime-list-container {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .anime-list, .playlist {
+        width: 45%;
+    }
 }
 
-.anime-list {
-    height: fit-content;
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .anime-list-container {
+        flex-direction: column;
+    }
+
+    .anime-list, .playlist {
+        width: 100%;
+    }
+
+    video {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
-.playlist {
-    background: #1e1e1e;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.playlist h3 {
-    margin-top: 0;
+.anime-list, .playlist, .video-container {
+    animation: fadeIn 0.6s ease-out;
 }
 
+/* Специальные состояния */
+.anime-list button.loading {
+    background: #a0aec0;
+    cursor: not-allowed;
+}
+
+.anime-list button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для активной кнопки */
+.anime-list button.active, .playlist button.active {
+    background: linear-gradient(135deg, #ed64a6, #ed8936);
+    box-shadow: 0 4px 15px rgba(237, 100, 166, 0.4);
+}
+
+/* Полоса прокрутки */
+.anime-list::-webkit-scrollbar, .playlist::-webkit-scrollbar {
+    width: 6px;
+}
+
+.anime-list::-webkit-scrollbar-track, .playlist::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.anime-list::-webkit-scrollbar-thumb, .playlist::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 3px;
+}
+
+.anime-list::-webkit-scrollbar-thumb:hover, .playlist::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+/* Контейнеры для скролла */
 #animeContainer, #episodeContainer {
-    display: flex;
-    flex-direction: column;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Заголовок страницы */
+body::before {
+    content: '🎬 Аниме Плеер';
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    }
+
+    .anime-list, .playlist {
+        background: rgba(45, 55, 72, 0.95);
+        color: #e2e8f0;
+    }
+
+    .anime-list h3, .playlist h3 {
+        color: #e2e8f0;
+        border-bottom-color: #4a5568;
+    }
+
+    .format-info {
+        color: #a0aec0;
+    }
 }
